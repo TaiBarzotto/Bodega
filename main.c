@@ -2,7 +2,9 @@
 #include <stdlib.h> 
 #include <string.h>
 #include <ctype.h>
-#include "Bodega.h"
+#include "Empresa.h"
+#include "Bebidas.h"
+#include "Clientes.h"
 
 
 
