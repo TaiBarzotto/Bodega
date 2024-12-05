@@ -122,8 +122,6 @@ void cadastrar_cliente(S_Clientes *s){
             printf("Informe o nome do cliente!\n");
             continue; 
         }
-
-        
         break;
     }
 
