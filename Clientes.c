@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "Clientes.h"
+#include "Auxiliares.h"
 
 int liberar_clientes(S_Clientes *s) {
     Cliente *atual = s->head;
@@ -27,43 +28,6 @@ void iniciar_cliente(S_Clientes *s){
     s->tail = NULL;
 }
 
-int formatarCPF(char *cpfEntrada, char *cpfFormatado) {
-    int j = 0, opcao;
-
-    for (int i = 0; cpfEntrada[i] != '\0'; i++) {
-        if (isdigit(cpfEntrada[i])) {
-            cpfFormatado[j++] = cpfEntrada[i];
-        
-        }
-    }
-    cpfFormatado[j] = '\0'; 
-
-    if (j == 11) {
-        // Formata o CPF
-        snprintf(cpfFormatado, 15, "%c%c%c.%c%c%c.%c%c%c-%c%c",
-                 cpfFormatado[0], cpfFormatado[1], cpfFormatado[2],
-                 cpfFormatado[3], cpfFormatado[4], cpfFormatado[5],
-                 cpfFormatado[6], cpfFormatado[7], cpfFormatado[8],
-                 cpfFormatado[9], cpfFormatado[10]);
-        return 2;
-    } 
-    printf("CPF invalido\n");
-    printf("0-SAIR\n");
-    printf("1-DIGITAR CPF NOVAMENTE\n");
-    scanf("%d", &opcao);
-    switch (opcao){
-        case 0:
-            return 0;
-        case 1:
-            return 1;
-        default:
-            while (getchar() != '\n');
-            printf("Opcao invalida, retornando ao menu principal\n");
-            return 0;
-        }
-
-}
-
 int validar_cpf(Cliente *temp, Cliente *aux){
     int opcao = 0; 
     while (temp != NULL)
@@ -71,8 +35,7 @@ int validar_cpf(Cliente *temp, Cliente *aux){
         if(strcmp(temp->cpf, aux->cpf) == 0){ // Verifica se esse CPF já foi cadastrado
             printf("Esse CPF ja foi cadastrado!\n");
             printf("0-SAIR\n");
-            printf("1-CADASTRAR OUTRO CPF\n");
-            scanf("%d", &opcao);
+            opcao = ler_inteiro("1-CADASTRAR OUTRO CPF\n");
             switch (opcao)
             {
             case 0:
@@ -114,25 +77,13 @@ void cadastrar_cliente(S_Clientes *s){
 
     aux->codigo = ++ultimo_codigo;
 
-    while (1) {
-        printf("Digite o nome do cliente: ");
-        scanf("%s", &aux->nome_cliente);
 
-        if (strlen(aux->nome_cliente) == 0) {
-            printf("Informe o nome do cliente!\n");
-            continue; 
-        }
-        break;
-    }
+    printf("Digite o nome do cliente: ");
+    scanf("%s", &aux->nome_cliente);
+    while (getchar() != '\n'); 
 
     while (1) {
-        printf("Digite a idade do cliente: ");
-
-        if (scanf("%d", &aux->idade) != 1) {
-            printf("Entrada invalida! Por favor, insira uma idade.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
+        aux->idade = ler_inteiro("Digite a idade do cliente: ");
 
         if (aux->idade < 0) {
             printf("Idade inválida! A idade deve ser um número positivo.\n");
@@ -142,13 +93,7 @@ void cadastrar_cliente(S_Clientes *s){
     } 
 
     while(1) {
-        printf("Vender fiado (0-NAO 1-SIM): ");
-
-        if (scanf("%d", &aux->fiado) != 1) {
-            printf("Entrada invalida! Por favor, insira 0 para NAO ou 1 para SIM.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
+        aux->fiado = ler_inteiro("Vender fiado (0-NAO 1-SIM): ");
 
         if (aux->fiado != 0 && aux->fiado != 1) {
             printf("Opcaoo invalida! Por favor, insira 0 para NAO ou 1 para SIM.\n");
