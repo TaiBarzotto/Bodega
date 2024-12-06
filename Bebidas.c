@@ -186,18 +186,18 @@ void cadastrar_bebida(S_Bebidas *s) {
     while (1) {
         aux->ml = ler_float("Digite o conteudo liquido (mL): ");
     
-        if (aux->ml < 1) {
-            printf("Medida invalida. Insira um numero maior que 1\n");
+        if (aux->ml < 0) {
+            printf("Medida invalida. Insira um numero maior ou igual a 0\n");
             continue;
         }
         break;
     } 
     
     while (1) {
-        aux->preco = ler_float("Digite o preço da bebida: ");
+        aux->preco = ler_float("Digite o preco da bebida: ");
     
         if (aux->preco < 0) {
-            printf("Valor invalido. Insira um valor maior que 0\n");
+            printf("Valor invalido. Insira um valor maior ou igual a 0\n");
             continue;
         }
         break;
@@ -207,14 +207,14 @@ void cadastrar_bebida(S_Bebidas *s) {
         aux->quantidade = ler_inteiro("Digite a quantidade em estoque: ");
     
         if (aux->quantidade < 0) {
-            printf("Estoque invalido. Insira um valor maior ou igual 0\n");
+            printf("Estoque invalido. Insira um valor maior ou igual a 0\n");
             continue;
         }
         break;
     }
     
     while (1) {
-        aux->teor_alcoolico = ler_float("A bebida e alcoolica? (0-NAO   1-SIM): ");
+        aux->teor_alcoolico = ler_float("A bebida eh alcoolica? (0-NAO   1-SIM): ");
 
         if(aux->teor_alcoolico != 0 && aux->teor_alcoolico != 1){
             printf("Opcaoo invalida! Por favor, insira 0 para NAO ou 1 para SIM.\n");
