@@ -20,11 +20,10 @@ typedef struct {
 void iniciar_bebida(S_Bebidas *s);
 Bebida* validar_codigo(Bebida *node, int codigo);
 void cadastrar_bebida(S_Bebidas *s);
-void mostrar_bebida(Bebida *node);
-void exibir_bebidas(S_Bebidas *s);
+void exibir_bebidas(Bebida *node);
+void mostrar_bebida(S_Bebidas *s);
 void comprar_bebida(S_Bebidas *s);
 void liberar_bebidas(Bebida *node, int *contador);
-
 // Funções auxiliares para a árvore AVL
 int max(int a, int b);
 int height(Bebida *N);
