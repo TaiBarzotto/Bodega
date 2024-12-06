@@ -97,7 +97,7 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
 
     if(cliente == NULL){
         printf("Cliente nao cadastrado! \nVoltando ao menu principal para que possa cadastra-lo...\n");
-    
+        while (getchar() != '\n');
         return;
     }
 
