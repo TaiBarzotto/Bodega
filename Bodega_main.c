@@ -5,6 +5,7 @@
 #include "Empresa.h"
 #include "Bebidas.h"
 #include "Clientes.h"
+#include "Auxiliares.h"
 
 void vender_bebida(S_Bebidas *b, S_Clientes *c);
 
@@ -24,20 +25,14 @@ int main(){
         printf("5 - CADASTRAR CLIENTE\n");
         printf("6 - MOSTRAR CLIENTES CADASTRADOS\n");
         printf("0 - SAIR DO SISTEMA\n\n");
-        printf("Escolha uma opcao: ");
-        if (scanf("%d", &opcao) != 1) {
-            printf("Entrada invalida! Por favor, insira um numero.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
+        opcao = ler_inteiro("Escolha uma opcao: ");
 
         switch (opcao) {
             case 1:
                 cadastrar_bebida(&lista_bebidas);
                 break;
             case 2:
-                printf("\n==== BEBIDAS CADASTRADAS ====\n");
-                mostrar_bebida(lista_bebidas.root);
+                mostrar_bebida(&lista_bebidas);
                 break;
             case 3:
                 comprar_bebida(&lista_bebidas);
@@ -98,7 +93,8 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
     }
 
     if(temp_c == NULL){
-        printf("Cliente nao cadastrado! \nVoltando ao menu principal...\n");
+        printf("Cliente nao cadastrado! \nVoltando ao menu principal para que possa cadastra-lo...\n");
+        while (getchar() != '\n'); 
         return;
     }
 
@@ -108,22 +104,12 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
         printf("Digite o codigo da bebida: ");
         scanf("%d", &cod_bebida);
         bebida = validar_codigo(b->root, cod_bebida);
-        
+
         if (bebida == NULL) {
-            printf("Erro: Esse código não existe!\nO que deseja fazer?\n");
-            printf("0 - SAIR\n");
-            printf("1 - DIGITAR OUTRO CÓDIGO\n");
-            scanf("%d", &opcao);
-            switch (opcao) {
-                case 0:
-                    printf("Voltando ao menu principal...\n");
-                    return; // Sair
-                case 1:
-                    continue; // Tentar novamente
-                default:
-                    printf("Opção inválida! Voltando ao menu principal...\n");
-                    return; // Sair
-            }
+            while (getchar() != '\n'); 
+            opcao = mensagem_erro_codigo("Erro: Esse código não existe!\nO que deseja fazer?\n");
+            if(opcao == 0) return; // Sair
+            else continue; // Tentar novamente
         }
         break;
     }
@@ -149,5 +135,6 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
 
     bebida->quantidade -= qntd;
     printf("Bebida vendida!\n");
+    while (getchar() != '\n'); 
     return;
 }
