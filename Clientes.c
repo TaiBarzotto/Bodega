@@ -151,7 +151,7 @@ void mostrar_cliente(S_Clientes *s){
     }
 
     Cliente *aux = s->head;
-    printf("==== CLIENTES CADASTRADOS ====\n");
+    printf("\n==== CLIENTES CADASTRADOS ====\n");
     while (aux!=NULL)
     {
         printf("Codigo: %d\n", aux->codigo);
