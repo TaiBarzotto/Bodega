@@ -18,11 +18,15 @@ int ler_inteiro(const char *mensagem) {
     while (1) {
         printf("%s", mensagem);
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+            if (strcmp(buffer, "\n") == 0) {
+                printf("Entrada vazia. Por favor, digite um numero inteiro.\n");
+                continue; 
+            }
             if (numero_inteiro_valido(buffer)) {
                 valor = strtol(buffer, NULL, 10); // Converte a string para int
                 return valor; 
             } else {  
-                printf("Entrada inválida. Por favor, digite um número inteiro.\n");
+                printf("Entrada invalida. Por favor, digite um numero inteiro.\n");
             }
         } else {
             printf("Erro ao ler a entrada. Tente novamente.\n");
@@ -44,11 +48,15 @@ float ler_float(const char *mensagem) {
     while (1) {
         printf("%s", mensagem);
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+            if (strcmp(buffer, "\n") == 0) {
+                printf("Entrada vazia. Por favor, digite um numero decimal.\n");
+                continue; 
+            }
             if (numero_valido(buffer)) {
                 valor = strtof(buffer, NULL); 
                 return valor; 
             } else {
-                printf("Entrada inválida. Por favor, digite um número decimal.\n");
+                printf("Entrada invalida. Por favor, digite um numero decimal.\n");
             }
         } else {
             printf("Erro ao ler a entrada. Tente novamente.\n");
@@ -76,17 +84,17 @@ int formatarCPF(char *cpfEntrada, char *cpfFormatado) {
                  cpfFormatado[9], cpfFormatado[10]);
         return 2;
     } 
+    while (getchar() != '\n'); 
     printf("CPF invalido\n");
     printf("0-SAIR\n");
     printf("1-DIGITAR CPF NOVAMENTE\n");
-    scanf("%d", &opcao);
+    opcao = ler_inteiro("");
     switch (opcao){
         case 0:
             return 0;
         case 1:
             return 1;
         default:
-            while (getchar() != '\n');
             printf("Opcao invalida, retornando ao menu principal\n");
             return 0;
         }
@@ -97,7 +105,8 @@ int mensagem_erro_codigo(const char *mensagem){
     int opcao;
     printf("%s", mensagem);
     printf("0 - SAIR\n");
-    opcao = ler_inteiro("1 - DIGITAR OUTRO CODIGO\n");
+    printf("1 - DIGITAR OUTRO CODIGO\n");
+    opcao = ler_inteiro("");
     switch (opcao) {
         case 0:
             printf("Voltando ao menu principal...\n");
