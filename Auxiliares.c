@@ -2,12 +2,12 @@
 #include <stdlib.h> 
 #include <string.h>
 #include <ctype.h>
+#include "Auxiliares.h"
 
 int numero_inteiro_valido(const char *str) {
     char *endptr;
-    strtol(str, &endptr, 10); // Tenta converter a string para int
+    strtol(str, &endptr, 10); 
 
-    // Verifica se a conversão foi bem-sucedida e se não há caracteres restantes
     return *endptr == '\n' || *endptr == '\0';
 }
 
@@ -18,16 +18,13 @@ int ler_inteiro(const char *mensagem) {
     while (1) {
         printf("%s", mensagem);
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-            // Verifica se a entrada é um número inteiro válido
             if (numero_inteiro_valido(buffer)) {
                 valor = strtol(buffer, NULL, 10); // Converte a string para int
-                return valor; // Retorna o valor lido
-            } else {
-                // Se a conversão falhou, avise o usuário
+                return valor; 
+            } else {  
                 printf("Entrada inválida. Por favor, digite um número inteiro.\n");
             }
         } else {
-            // Se fgets falhar, avise o usuário
             printf("Erro ao ler a entrada. Tente novamente.\n");
         }
     }
@@ -35,13 +32,11 @@ int ler_inteiro(const char *mensagem) {
 
 int numero_valido(const char *str) {
     char *endptr;
-    strtof(str, &endptr); // Tenta converter a string para float
+    strtof(str, &endptr); 
 
-    // Verifica se a conversão foi bem-sucedida e se não há caracteres restantes
     return *endptr == '\n' || *endptr == '\0';
 }
 
-// Função para ler um float com validação
 float ler_float(const char *mensagem) {
     float valor;
     char buffer[100];
@@ -49,16 +44,13 @@ float ler_float(const char *mensagem) {
     while (1) {
         printf("%s", mensagem);
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-            // Verifica se a entrada é um número válido
             if (numero_valido(buffer)) {
-                valor = strtof(buffer, NULL); // Converte a string para float
-                return valor; // Retorna o valor lido
+                valor = strtof(buffer, NULL); 
+                return valor; 
             } else {
-                // Se a conversão falhou, avise o usuário
                 printf("Entrada inválida. Por favor, digite um número decimal.\n");
             }
         } else {
-            // Se fgets falhar, avise o usuário
             printf("Erro ao ler a entrada. Tente novamente.\n");
         }
     }
