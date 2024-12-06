@@ -108,6 +108,7 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
         printf("Digite o codigo da bebida: ");
         scanf("%d", &cod_bebida);
         bebida = validar_codigo(b->root, cod_bebida);
+        
         if (bebida == NULL) {
             printf("Erro: Esse código não existe!\nO que deseja fazer?\n");
             printf("0 - SAIR\n");
@@ -124,7 +125,7 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
                     return; // Sair
             }
         }
-     
+        break;
     }
     
     if (bebida == NULL) {
