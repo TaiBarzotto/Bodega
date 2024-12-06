@@ -68,7 +68,7 @@ int formatarCPF(char *cpfEntrada, char *cpfFormatado) {
     int j = 0, opcao;
 
     for (int i = 0; cpfEntrada[i] != '\0'; i++) {
-        if (isdigit(cpfEntrada[i])) {
+        if (isalnum(cpfEntrada[i])) {
             cpfFormatado[j++] = cpfEntrada[i];
         
         }
