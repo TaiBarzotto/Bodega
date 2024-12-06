@@ -2,6 +2,7 @@
 #include <stdlib.h> 
 #include <string.h>
 #include "Bebidas.h"
+#include "Auxiliares.h"
 
 int max(int a, int b) {
     return (a > b) ? a : b;
@@ -125,25 +126,24 @@ void liberar_bebidas(Bebida *node, int *contador) {
     (*contador)++;
 }
 
-// Função para liberar a estrutura de bebidas
 void liberar_bebidas_root(S_Bebidas *s, int *contador) {
     liberar_bebidas(s->root, contador);
-    s->root = NULL; // Limpa a raiz
+    s->root = NULL; 
 }
-
 
 void iniciar_bebida(S_Bebidas *s) {
     s->root = NULL;
 }
 
 Bebida* validar_codigo(Bebida *node, int codigo) {
+
     if (node == NULL) {
         return NULL; 
     }
     if (node->codigo == codigo) {
         return node; 
     }
-    // Se o código não for encontrado, continue a busca
+
     if (codigo < node->codigo) {
         return validar_codigo(node->left, codigo); 
     } else {
@@ -161,60 +161,31 @@ void cadastrar_bebida(S_Bebidas *s) {
 
     // Verificar se o código já existe
     while (1) {
-        printf("Digite o codigo da bebida: ");
-
-        if (scanf("%d", &codigo) != 1) {
-            printf("Entrada invalida! Por favor, insira numero\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
+        codigo = ler_inteiro("Digite o codigo da bebida: ");
 
         temp = validar_codigo(s->root, codigo);
         if (temp == NULL) {
             aux->codigo = codigo;
             break;
         }else{
-            printf("Esse codigo ja existe!\n");
-            printf("0-SAIR\n");
-            printf("1-CADASTRAR OUTRO CODIGO\n");
-            scanf("%d", &opcao);
-            switch (opcao)
-            {
-            case 0:
+            opcao = mensagem_erro_codigo("Esse codigo ja existe!\n");
+            if (opcao == 0){
                 free(aux);
                 return;
-            case 1:
-                while (getchar() != '\n'); 
+            }
+            else{
                 continue;
-            default:
-                while (getchar() != '\n'); 
-                printf("Opcao invalida, retornando ao menu principal\n");
-                return;
             }
         }
     }
 
-    
-    while (1) {
-        printf("Digite o nome da bebida: ");
-        scanf("%s", &aux->nome_bebida);
-
-        if (strlen(aux->nome_bebida) == 0) {
-            printf("Informe o nome do cliente!\n");
-            continue; 
-        }
-        break;
-    }
+    printf("Digite o nome da bebida: ");
+    scanf("%s", &aux->nome_bebida);
+    while (getchar() != '\n'); 
 
     while (1) {
-        printf("Digite o conteudo liquido (mL): ");
+        aux->ml = ler_float("Digite o conteudo liquido (mL): ");
     
-        if (scanf("%f", &aux->ml) != 1) {
-            printf("Entrada invalida! Por favor, insira um valor numerico.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
-
         if (aux->ml < 1) {
             printf("Medida invalida. Insira um numero maior que 1\n");
             continue;
@@ -223,14 +194,8 @@ void cadastrar_bebida(S_Bebidas *s) {
     } 
     
     while (1) {
-        printf("Digite o preço da bebida: ");
+        aux->preco = ler_float("Digite o preço da bebida: ");
     
-        if (scanf("%f", &aux->preco) != 1) {
-            printf("Entrada invalida! Por favor, insira um valor numerico.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
-
         if (aux->preco < 0) {
             printf("Valor invalido. Insira um valor maior que 0\n");
             continue;
@@ -239,13 +204,8 @@ void cadastrar_bebida(S_Bebidas *s) {
     }
 
     while (1) {
-        printf("Digite a quantidade em estoque: ");
+        aux->quantidade = ler_inteiro("Digite a quantidade em estoque: ");
     
-        if (scanf("%d", &aux->quantidade) != 1) {
-            printf("Entrada invalida! Por favor, insira um valor numerico.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
         if (aux->quantidade < 0) {
             printf("Estoque invalido. Insira um valor maior ou igual 0\n");
             continue;
@@ -254,13 +214,8 @@ void cadastrar_bebida(S_Bebidas *s) {
     }
     
     while (1) {
-        printf("A bebida e alcoolica? (0-NAO   1-SIM): ");
-    
-        if (scanf("%f", &aux->teor_alcoolico) != 1) {
-            printf("Entrada invalida! Por favor, insira um valor numerico.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
+        aux->teor_alcoolico = ler_float("A bebida e alcoolica? (0-NAO   1-SIM): ");
+
         if(aux->teor_alcoolico != 0 && aux->teor_alcoolico != 1){
             printf("Opcaoo invalida! Por favor, insira 0 para NAO ou 1 para SIM.\n");
             continue;
@@ -268,33 +223,20 @@ void cadastrar_bebida(S_Bebidas *s) {
         break;
     }
 
+    if (aux->teor_alcoolico == 1) aux->teor_alcoolico = ler_float("Digite o teor alcoolico: ");
     
-    if (aux->teor_alcoolico == 1) {
-        while (1) {
-            printf("Digite o teor alcoolico: ");
-
-            if (scanf("%f", &aux->teor_alcoolico) != 1) {
-                printf("Entrada invalida! Por favor, insira um valor numerico.\n");
-                while (getchar() != '\n'); 
-                continue; 
-            }
-            break;
-        }
-    }
-
-    // Insere a bebida na árvore
     s->root = insertBebida(s->root, aux->codigo, aux->nome_bebida, aux->ml, aux->preco, aux->quantidade, aux->teor_alcoolico);
     
-    free(aux); // Libera a memória do auxiliar
+    free(aux); 
     printf("Bebida cadastrada com sucesso!\n");
 
 }
 
-void mostrar_bebida(Bebida *node){
+void exibir_bebidas(Bebida *node){
     if (node == NULL) {
         return;
     }
-    mostrar_bebida(node->left);
+    exibir_bebidas(node->left);
     printf("Codigo: %d\n", node->codigo);
     printf("Nome: %s\n", node->nome_bebida);
     printf("Conteudo liquido: %.2f mL\n", node->ml);
@@ -302,16 +244,16 @@ void mostrar_bebida(Bebida *node){
     printf("Preco de venda: R$ %.2f\n", node->preco);
     printf("Alcoolico: %s\n", (node->teor_alcoolico > 0) ? "Sim" : "Nao");
     printf("-------------------------------------\n");
-    mostrar_bebida(node->right);
+    exibir_bebidas(node->right);
 }
 
-void exibir_bebidas(S_Bebidas *s) {
+void mostrar_bebida(S_Bebidas *s) {
     if (s->root == NULL) {
         printf("Nenhuma bebida cadastrada no sistema!\n");
         return;
     }
-    printf("==== BEBIDAS CADASTRADAS ====\n");
-    mostrar_bebida(s->root);
+    printf("\n==== BEBIDAS CADASTRADAS ====\n");
+    exibir_bebidas(s->root);
 }
 
 void comprar_bebida(S_Bebidas *s) {
@@ -324,43 +266,20 @@ void comprar_bebida(S_Bebidas *s) {
     }
 
     while (1)
-    {
-        printf("Digite o codigo da bebida: ");
-        if (scanf("%d", &codigo) != 1) {
-            printf("Entrada invalida! Por favor, insira numero\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
+    {   
+        codigo = ler_inteiro("Digite o codigo da bebida: ");
         bebida = validar_codigo(s->root, codigo);
         if (bebida == NULL) {
-            printf("Erro: Esse codigo nao existe!\nO que deseja fazer?\n");
-            printf("0 - SAIR\n");
-            printf("1 - DIGITAR OUTRO CODIGO\n");
-            scanf("%d", &opcao);
-            switch (opcao) {
-                case 0:
-                    printf("Voltando ao menu principal...\n");
-                    return; // Sair
-                case 1:
-                    continue; // Tentar novamente
-                default:
-                    printf("Opcao invalida! Voltando ao menu principal...\n");
-                    return; // Sair
-            }
+            opcao = mensagem_erro_codigo("Erro: Esse codigo nao existe!\nO que deseja fazer?\n");
+            if(opcao == 0) return; // Sair
+            else continue;// Tentar novamente
         }
-
         break;
-     
     }
     
     while (1) {
-        printf("Digite quantas unidades foram compradas: ");
+        quantidade = ler_inteiro("Digite quantas unidades foram compradas: ");
     
-        if (scanf("%d", &quantidade) != 1) {
-            printf("Entrada invalida! Por favor, insira um valor numerico.\n");
-            while (getchar() != '\n'); 
-            continue; 
-        }
         if (quantidade < 1) {
             printf("Compra invalida. Insira um valor maior ou igual 1\n");
             continue;
@@ -368,7 +287,6 @@ void comprar_bebida(S_Bebidas *s) {
         break;
     }
     
-    // Atualiza a quantidade em estoque
     bebida->quantidade += quantidade; 
     printf("Estoque atualizado! Nova quantidade: %d unidades\n", bebida->quantidade);
 }
