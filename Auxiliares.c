@@ -11,7 +11,8 @@ int numero_inteiro_valido(const char *str) {
     return *endptr == '\n' || *endptr == '\0';
 }
 
-int ler_inteiro(const char *mensagem) {
+int 
+ler_inteiro(const char *mensagem) {
     int valor;
     char buffer[100];
 
@@ -64,30 +65,81 @@ float ler_float(const char *mensagem) {
     }
 }
 
-int formatarCPF(char *cpfEntrada, char *cpfFormatado) {
-    int j = 0, opcao;
+int formatarCPF(char *cpf_entrada, char *cpf_formatado) {
+    int j = 0, a, b=0, opcao;
 
-    for (int i = 0; cpfEntrada[i] != '\0'; i++) {
-        if (isalnum(cpfEntrada[i])) {
-            cpfFormatado[j++] = cpfEntrada[i];
+    for (int i = 0; cpf_entrada[i] != '\0'; i++) {
+        if (isalnum(cpf_entrada[i])) {
+            cpf_formatado[j++] = cpf_entrada[i];
         
         }
     }
-    cpfFormatado[j] = '\0'; 
+    for (a = 0; cpf_entrada[a] != '\0'; a++) {
+        if (isdigit(cpf_entrada[a])) {
+            cpf_formatado[b++] = cpf_entrada[a];
+        
+        }
+    }
+    cpf_formatado[b] = '\0'; 
 
-    if (j == 11) {
+    if (j == 11 && b == 11) {
         // Formata o CPF
-        snprintf(cpfFormatado, 15, "%c%c%c.%c%c%c.%c%c%c-%c%c",
-                 cpfFormatado[0], cpfFormatado[1], cpfFormatado[2],
-                 cpfFormatado[3], cpfFormatado[4], cpfFormatado[5],
-                 cpfFormatado[6], cpfFormatado[7], cpfFormatado[8],
-                 cpfFormatado[9], cpfFormatado[10]);
+        snprintf(cpf_formatado, 15, "%c%c%c.%c%c%c.%c%c%c-%c%c",
+                 cpf_formatado[0], cpf_formatado[1], cpf_formatado[2],
+                 cpf_formatado[3], cpf_formatado[4], cpf_formatado[5],
+                 cpf_formatado[6], cpf_formatado[7], cpf_formatado[8],
+                 cpf_formatado[9], cpf_formatado[10]);
         return 2;
     } 
     while (getchar() != '\n'); 
     printf("CPF invalido\n");
     printf("0-SAIR\n");
     printf("1-DIGITAR CPF NOVAMENTE\n");
+    opcao = ler_inteiro("");
+    switch (opcao){
+        case 0:
+            return 0;
+        case 1:
+            return 1;
+        default:
+            printf("Opcao invalida, retornando ao menu principal\n");
+            return 0;
+        }
+
+}
+
+int formatarCNPJ(char *cnpj_entrada, char *cnpj_Formatado) {
+    int j = 0, a,b=0, opcao;
+
+    for (int i = 0; cnpj_entrada[i] != '\0'; i++) {
+        if (isalnum(cnpj_entrada[i])) {
+            cnpj_Formatado[j++] = cnpj_entrada[i];
+        
+        }
+    }
+
+    for (int a = 0; cnpj_entrada[a] != '\0'; a++) {
+        if (isdigit(cnpj_entrada[a])) {
+            cnpj_Formatado[b++] = cnpj_entrada[b];
+        
+        }
+    }
+    cnpj_Formatado[b] = '\0'; 
+
+    if (b == 14 && j == 14) {
+        // Formata o CNPJ
+        snprintf(cnpj_Formatado, 19, "%c%c.%c%c%c.%c%c%c/%c%c%c%c-%c%c",
+                 cnpj_Formatado[0], cnpj_Formatado[1], cnpj_Formatado[2],
+                 cnpj_Formatado[3], cnpj_Formatado[4], cnpj_Formatado[5],
+                 cnpj_Formatado[6], cnpj_Formatado[7], cnpj_Formatado[8],
+                 cnpj_Formatado[9], cnpj_Formatado[10], cnpj_Formatado[11],
+                 cnpj_Formatado[12], cnpj_Formatado[13]);
+        return 2;
+    } 
+    while (getchar() != '\n'); 
+    printf("CNPJ invalido\n");
+    printf("0-SAIR\n");
+    printf("1-DIGITAR CNPJ NOVAMENTE\n");
     opcao = ler_inteiro("");
     switch (opcao){
         case 0:

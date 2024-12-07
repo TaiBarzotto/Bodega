@@ -1,3 +1,5 @@
+#ifndef BEBIDAS_H
+#define BEBIDAS_H
 struct Bebida 
 {
     int codigo;
@@ -12,7 +14,7 @@ struct Bebida
 };
 typedef struct Bebida Bebida;
 
-typedef struct {
+typedef struct S_bebida{
     Bebida *root;
 } S_Bebidas;
 
@@ -32,3 +34,4 @@ int getBalance(Bebida *N);
 Bebida *rightRotate(Bebida *y);
 Bebida *leftRotate(Bebida *x);
 Bebida *insertBebida(Bebida *node, int codigo, const char *nome_bebida, float ml, float preco, int quantidade, float teor_alcoolico);
+#endif

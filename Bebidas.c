@@ -136,7 +136,6 @@ void iniciar_bebida(S_Bebidas *s) {
 }
 
 Bebida* validar_codigo(Bebida *node, int codigo) {
-
     if (node == NULL) {
         return NULL; 
     }
@@ -180,7 +179,7 @@ void cadastrar_bebida(S_Bebidas *s) {
     }
 
     printf("Digite o nome da bebida: ");
-    scanf("%s", &aux->nome_bebida);
+    scanf("%s", aux->nome_bebida);
     while (getchar() != '\n'); 
 
     while (1) {
@@ -243,6 +242,9 @@ void exibir_bebidas(Bebida *node){
     printf("Quantidade em estoque: %d unidades\n", node->quantidade);
     printf("Preco de venda: R$ %.2f\n", node->preco);
     printf("Alcoolico: %s\n", (node->teor_alcoolico > 0) ? "Sim" : "Nao");
+    if(node->teor_alcoolico > 0){
+        printf("Teor Alcoolico: %.2f \n", node->teor_alcoolico > 0);  
+    }
     printf("-------------------------------------\n");
     exibir_bebidas(node->right);
 }

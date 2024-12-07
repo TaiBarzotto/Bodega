@@ -1,3 +1,5 @@
+#ifndef CLIENTES_H
+#define CLIENTES_H
 typedef struct Cliente {
     int codigo;
     char nome_cliente[100];
@@ -22,3 +24,4 @@ void mostrar_cliente(S_Clientes *s);
 // Variável global para o último código de cliente
 extern int ultimo_codigo;
 
+#endif

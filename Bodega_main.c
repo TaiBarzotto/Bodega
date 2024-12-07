@@ -2,68 +2,111 @@
 #include <stdlib.h> 
 #include <string.h>
 #include <ctype.h>
-#include "Empresa.h"
 #include "Bebidas.h"
+#include "Empresa.h"
 #include "Clientes.h"
 #include "Auxiliares.h"
 
 void vender_bebida(S_Bebidas *b, S_Clientes *c);
 
 int main(){
-    int opcao = -1, clientes, bebidas;
-    S_Bebidas lista_bebidas;
-    S_Clientes lista_clientes;
-
-    iniciar_bebida(&lista_bebidas);
-    iniciar_cliente(&lista_clientes);
+    S_Empresa bodegas;
+    iniciar_empresa(&bodegas);
+  
+    Empresa *bodega_atual =(Empresa *) malloc(sizeof(Empresa));
+    iniciar_bebida(&bodega_atual->lista_bebidas);  // Inicializa a lista de bebidas
+    iniciar_cliente(&bodega_atual->lista_clientes); 
+    int opcao = -1, clientes=0, bebidas=0, login;
     do {
         printf("\n==== MENU DE OPCOES ====\n");
-        printf("1 - CADASTRAR NOVA BEBIDA\n");
-        printf("2 - MOSTRAR BEBIDAS CADASTRADAS\n");
-        printf("3 - REPOR ESTOQUE BEBIDA (COMPRA DE BEBIDA)\n");
-        printf("4 - VENDER BEBIDA\n");
-        printf("5 - CADASTRAR CLIENTE\n");
-        printf("6 - MOSTRAR CLIENTES CADASTRADOS\n");
+        printf("1 - CADASTRAR NOVA BODEGA\n");
+        printf("2 - LOGAR EM UMA BODEGA EXISTENTE\n");
         printf("0 - SAIR DO SISTEMA\n\n");
         opcao = ler_inteiro("Escolha uma opcao: ");
 
         switch (opcao) {
             case 1:
-                cadastrar_bebida(&lista_bebidas);
+                cadastrar_bodega(&bodegas);
                 break;
             case 2:
-                mostrar_bebida(&lista_bebidas);
-                break;
-            case 3:
-                comprar_bebida(&lista_bebidas);
-                break;
-            case 4:
-                vender_bebida(&lista_bebidas, &lista_clientes);
-                break;
-            case 5:
-                cadastrar_cliente(&lista_clientes);
-                break;
-            case 6:
-                mostrar_cliente(&lista_clientes);
-                break;
+                if(bodegas.head == NULL){
+                    printf("Nenhuma empresa cadastrada\n");
+                    continue;
+                }
+                login = logar_bodega(&bodegas, bodega_atual); 
+                if(login == 1) {
+                    printf("CNPJ nao encontrado. Por favor cadastre-se\n");
+                    while (getchar() != '\n');
+                    continue;
+                }
+                if(login == 0) continue;
+
+                if (&bodega_atual != NULL) {
+                    while (getchar() != '\n');
+                    do {
+                        printf("\n==== MENU DE OPCOES ====\n");
+                        printf("1 - CADASTRAR NOVA BEBIDA\n");
+                        printf("2 - MOSTRAR BEBIDAS CADASTRADAS\n");
+                        printf("3 - REPOR ESTOQUE BEBIDA (COMPRA DE BEBIDA)\n");
+                        printf("4 - VENDER BEBIDA\n");
+                        printf("5 - CADASTRAR CLIENTE\n");
+                        printf("6 - MOSTRAR CLIENTES CADASTRADOS\n");
+                        printf("7 - LOGOUT\n");
+                        printf("0 - SAIR DO SISTEMA\n\n");
+                        opcao = ler_inteiro("Escolha uma opcao: ");
+
+                        switch (opcao) {
+                            case 1:
+                                cadastrar_bebida(&bodega_atual->lista_bebidas);
+                                break;
+                            case 2:
+                                mostrar_bebida(&bodega_atual->lista_bebidas);
+                                break;
+                            case 3:
+                                comprar_bebida(&bodega_atual->lista_bebidas);
+                                break;
+                            case 4:
+                                vender_bebida(&bodega_atual->lista_bebidas, &bodega_atual->lista_clientes);
+                                break;
+                            case 5:
+                                cadastrar_cliente(&bodega_atual->lista_clientes);
+                                break;
+                            case 6:
+                                mostrar_cliente(&bodega_atual->lista_clientes);
+                                break;
+                            case 7:
+                                bodega_atual = NULL;
+                                break;
+                            case 0:
+                                while (&bodegas !=NULL){
+                                    clientes = liberar_clientes(&bodegas.head->lista_clientes);
+                                    liberar_bebidas(bodegas.head->lista_bebidas.root, &bebidas);
+                                }
+                                printf("Elementos liberados: %d\n", clientes+bebidas);
+                                printf("Saindo do sistema...\n");
+                                return 0;
+                            default:
+                                printf("Opcao invalida! Tente novamente.\n");
+                                continue;
+                        }
+                    } while(&bodega_atual != NULL);
+                }
             case 0:
-                clientes = liberar_clientes(&lista_clientes);
-                liberar_bebidas(lista_bebidas.root, &bebidas);
+                while (&bodegas !=NULL){
+                    clientes = liberar_clientes(&bodegas.head->lista_clientes);
+                    liberar_bebidas(bodegas.head->lista_bebidas.root, &bebidas);
+                }
                 printf("Elementos liberados: %d\n", clientes+bebidas);
                 printf("Saindo do sistema...\n");
                 return 0;
-            default:
-                printf("Opcao invalida! Tente novamente.\n");
-                continue;
         }
-    } while(opcao != 0);
-
+    }while (1);
     return 0;
 }
 
 void vender_bebida(S_Bebidas *b, S_Clientes *c){
     char cpf_digitado[15], cpf[20];
-    int cod_bebida, validacao = 2, qntd, opcao, pagamento;
+    int cod_bebida, qntd, opcao, pagamento;
     Cliente *cliente = c->head;
     Bebida *bebida;
 
