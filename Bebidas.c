@@ -81,6 +81,7 @@ Bebida *insertBebida(Bebida *node, int codigo, const char *nome_bebida, float ml
     else if (codigo > node->codigo)
         node->right = insertBebida(node->right, codigo, nome_bebida, ml, preco, quantiedade, teor_alcoolico);
     else // Códigos duplicados não são permitidos
+        printf("Erro: Código %d já existe!\n", codigo);
         return node;
 
     // 2. Atualiza a altura do nó ancestral
@@ -222,8 +223,17 @@ void cadastrar_bebida(S_Bebidas *s) {
         break;
     }
 
-    if (aux->teor_alcoolico == 1) aux->teor_alcoolico = ler_float("Digite o teor alcoolico: ");
-    
+    if (aux->teor_alcoolico == 1) {
+        while (1) {
+            aux->teor_alcoolico = ler_float("Digite o teor alcoolico: ");
+
+            if(aux->teor_alcoolico < 1 ){
+                printf("Opcao invalida! Por favor, insira um valor maior ou igual a 1.\n");
+                continue;
+            }
+            break;
+        }
+    }
     s->root = insertBebida(s->root, aux->codigo, aux->nome_bebida, aux->ml, aux->preco, aux->quantidade, aux->teor_alcoolico);
     
     free(aux); 
@@ -243,7 +253,7 @@ void exibir_bebidas(Bebida *node){
     printf("Preco de venda: R$ %.2f\n", node->preco);
     printf("Alcoolico: %s\n", (node->teor_alcoolico > 0) ? "Sim" : "Nao");
     if(node->teor_alcoolico > 0){
-        printf("Teor Alcoolico: %.2f \n", node->teor_alcoolico > 0);  
+        printf("Teor Alcoolico: %.2f \n", node->teor_alcoolico);  
     }
     printf("-------------------------------------\n");
     exibir_bebidas(node->right);

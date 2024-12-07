@@ -75,9 +75,9 @@ void cadastrar_bodega(S_Empresa *s){
     scanf("%s", &aux->nome_empresa);
     while (getchar() != '\n'); 
 
-    aux->next = NULL;
     iniciar_bebida(&aux->lista_bebidas);
     iniciar_cliente(&aux->lista_clientes);
+    aux->next = NULL;
 
     if(s->head == NULL){
         s->head = aux;
@@ -89,7 +89,7 @@ void cadastrar_bodega(S_Empresa *s){
     printf("Bodega cadastrada!\n");
 }
 
-int logar_bodega(S_Empresa *s, Empresa *loging){
+Empresa *logar_bodega(S_Empresa *s){
     int opcao;
     char cnpj[20], cnpj_digitado[25];
     Empresa *empresa = s->head;
@@ -100,7 +100,7 @@ int logar_bodega(S_Empresa *s, Empresa *loging){
         opcao = formatarCNPJ(cnpj_digitado, cnpj);
         if (opcao == 0) {   
             printf("Voltando ao menu inicial...\n");
-            return 0; 
+            return NULL; 
         }
         if (opcao == 2) break;
     }
@@ -108,10 +108,11 @@ int logar_bodega(S_Empresa *s, Empresa *loging){
     while (empresa != NULL)
     {
         if(strcmp(empresa->cnpj, cnpj)==0){
-            loging = empresa;
-            return 2;
+            return empresa;
         }
         empresa = empresa->next;
     }
-    return 1;
+    printf("Erro: CNPJ nao encontrado. Por favor cadastre-se\n");
+    while (getchar() != '\n');
+    return NULL;
 }

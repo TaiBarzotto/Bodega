@@ -21,7 +21,7 @@ typedef struct S_Empresa
     Empresa *tail;
 }S_Empresa;
 
-int logar_bodega(S_Empresa *s, Empresa *loging);
+Empresa *logar_bodega(S_Empresa *s);
 void iniciar_empresa(S_Empresa *s);
 int validar_cnpj(Empresa *temp, Empresa *aux);
 void cadastrar_bodega(S_Empresa *s);

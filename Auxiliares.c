@@ -120,7 +120,7 @@ int formatarCNPJ(char *cnpj_entrada, char *cnpj_Formatado) {
 
     for (int a = 0; cnpj_entrada[a] != '\0'; a++) {
         if (isdigit(cnpj_entrada[a])) {
-            cnpj_Formatado[b++] = cnpj_entrada[b];
+            cnpj_Formatado[b++] = cnpj_entrada[a];
         
         }
     }
