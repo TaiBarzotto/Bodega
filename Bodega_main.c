@@ -10,12 +10,12 @@
 void vender_bebida(S_Bebidas *b, S_Clientes *c);
 
 int main(){
-    S_Empresa bodegas;
+    S_Empresa bodegas; //Lista de todas as bodegas cadastradas
     iniciar_empresa(&bodegas);
-    Empresa *bodega_anterior;
-    Empresa *bodega_atual;
+    Empresa *bodega_anterior; //Armazenar bodega anterior para liberar a memoria
+    Empresa *bodega_atual; //Armazena o endereço da bodega logada
 
-    int opcao = -1, opcao_emp,clientes=0, bebidas=0,bodega=0,contador=0, login;
+    int opcao = -1, opcao_emp,clientes=0, bebidas=0,bodega=0,contador=0;
     while (1) {
         printf("\n==== MENU DE OPCOES ====\n");
         printf("1 - CADASTRAR NOVA BODEGA\n");
@@ -38,7 +38,7 @@ int main(){
                 }
                 
                 while (getchar() != '\n');
-                while(bodega_atual != NULL) {
+                while(bodega_atual != NULL) { //Enquanto eu não der logout 
                     printf("\nBODEGA ATUAL = %s\n", bodega_atual->nome_empresa);
                     printf("==== MENU DE OPCOES ====\n");
                     printf("1 - CADASTRAR NOVA BEBIDA\n");
@@ -74,6 +74,7 @@ int main(){
                                 bodega_atual = NULL;
                                 break;
                         case 0:
+                            //libera memoria, contando quantos foram liberados 
                             while (bodegas.head != NULL){
                                 clientes += liberar_clientes(&bodegas.head->lista_clientes);
                                 liberar_bebidas(bodegas.head->lista_bebidas.root, &bebidas);
@@ -85,7 +86,7 @@ int main(){
                             printf("Elementos liberados: %d\n", clientes+bebidas+bodega);
                             printf("Bodegas: %d\nBebidas: %d\nClientes: %d\n", bodega,bebidas,clientes);
                             printf("Saindo do sistema...\n");
-                            return 0;
+                            return 0; //Sai do programa
                         default:
                             printf("Opcao invalida! Tente novamente.\n");
                             continue;
@@ -94,6 +95,7 @@ int main(){
                 }
             break;
             case 0:
+                //libera memoria, contando quantos foram liberados 
                 while (bodegas.head != NULL){
                     clientes += liberar_clientes(&bodegas.head->lista_clientes);
                     liberar_bebidas(bodegas.head->lista_bebidas.root, &bebidas);
@@ -105,7 +107,7 @@ int main(){
                 printf("Elementos liberados: %d\n", clientes+bebidas+bodega);
                 printf("Bodegas: %d\nBebidas: %d\nClientes: %d\n", bodega,bebidas,clientes);
                 printf("Saindo do sistema...\n");
-                return 0;
+                return 0; //Sai do programa
             default:
                 printf("Opcao invalida! Tente novamente.\n");
                 continue;
@@ -114,17 +116,17 @@ int main(){
 }
 
 void vender_bebida(S_Bebidas *b, S_Clientes *c){
-    char cpf_digitado[15], cpf[20];
+    char cpf_digitado[15], cpf[20]; //Vetores para formatar o CPF
     int cod_bebida, qntd, opcao, pagamento;
-    Cliente *cliente = c->head;
-    Bebida *bebida;
+    Cliente *cliente = c->head; //Cliente para quem vai ser vendido
+    Bebida *bebida; //Bebida a ser vendida
 
     if(b->root == NULL){
         printf("Nenhuma bebida cadastrada no sistema!\nPor favor, cadastre as bebidas antes de realizar as vendas\n");
         return;
     }
     if(c->head == NULL){
-        printf("Nenhum cliente cadastrado no sistema!\nPor favor, cadastre faça o cadastro antes de realizar vendas\n");
+        printf("Nenhum cliente cadastrado no sistema!\nPor favor, cadastre faca o cadastro antes de realizar vendas\n");
         return;
     }
 
@@ -133,12 +135,12 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
         scanf("%s", cpf_digitado);
         opcao = formatarCPF(cpf_digitado, cpf);
         if (opcao == 0) {   
-        
-            return; 
+            return; //Sair
         }
         if (opcao == 2) break; // CPF válido
     }
 
+    //Procura o cliente com aquele CPF
     while (cliente != NULL)
     {
         if(strcmp(cliente->cpf, cpf)==0){
@@ -153,15 +155,14 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
         return;
     }
 
+    while (getchar() != '\n');
 
     while (1)
     {
-        printf("Digite o codigo da bebida: ");
-        scanf("%d", &cod_bebida);
+        cod_bebida = ler_inteiro("Digite o codigo da bebida: ");
         bebida = validar_codigo(b->root, cod_bebida);
 
         if (bebida == NULL) {
-            while (getchar() != '\n');
             opcao = mensagem_erro_codigo("Erro: Esse codigo nao existe!\nO que deseja fazer?\n");
             if(opcao == 0) return; // Sair
             else continue; // Tentar novamente
@@ -169,14 +170,16 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
         break;
     }
 
+    //Não pode vender alcool para menor de idade
     if(bebida->teor_alcoolico>0 && cliente ->idade <18){
         printf("O cliente tem menos de 18 anos e a bebida eh alcoolica!\n");
-        while (getchar() != '\n');
         return;
     }
-    while (getchar() != '\n');
-    qntd = ler_inteiro("Digite a quantidadde de bebida que deseja vender: ");
+
+    qntd = ler_inteiro("Digite a quantidade de bebida que deseja vender: ");
+
     while (1){
+        //Verifica se tem estoque suficiente para venda
         if(bebida->quantidade <= 0 || bebida->quantidade < qntd){
             printf("Bebida com estoque insuficiente\n");
             printf("Quantidade atual: %d\n", bebida->quantidade);
@@ -197,6 +200,10 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
                     printf("Opcao invalida, retornando ao menu principal\n");
                     return;
             }
+        } else if(qntd < 1){
+            printf("Compra invalida. Insira um valor maior ou igual 1\n");
+            qntd = ler_inteiro("Digite a quantidade de bebida que deseja vender: ");
+            continue;
         }
         break;
     }
@@ -209,7 +216,15 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
     printf("5-FIADO\n");
     pagamento = ler_inteiro("Selecione a forma de pagamento: ");
 
-    while (1){
+    while (1)
+    {
+        if(pagamento>5 || pagamento<1){
+            printf("Opcao invalida! Escolha um valor entre 1 e 5!\n");
+            pagamento = ler_inteiro("Selecione a forma de pagamento: "); 
+            continue; 
+        }
+        
+        //Verifica se pode vender fiado para o cliente
         if(pagamento == 5 && cliente->fiado == 0){
             printf("Erro: Nao pode vender fiado para esse cliente!\n");
             printf("0-SAIR\n");
@@ -229,6 +244,7 @@ void vender_bebida(S_Bebidas *b, S_Clientes *c){
         break;
     }
 
+    //Atualiza o estoque da bebida apos a venda
     bebida->quantidade -= qntd;
     printf("Bebida vendida!\n");
 }

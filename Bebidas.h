@@ -1,5 +1,6 @@
 #ifndef BEBIDAS_H
 #define BEBIDAS_H
+
 struct Bebida 
 {
     int codigo;
@@ -26,6 +27,7 @@ void exibir_bebidas(Bebida *node);
 void mostrar_bebida(S_Bebidas *s);
 void comprar_bebida(S_Bebidas *s);
 void liberar_bebidas(Bebida *node, int *contador);
+
 // Funções auxiliares para a árvore AVL
 int max(int a, int b);
 int height(Bebida *N);
@@ -34,4 +36,5 @@ int getBalance(Bebida *N);
 Bebida *rightRotate(Bebida *y);
 Bebida *leftRotate(Bebida *x);
 Bebida *insertBebida(Bebida *node, int codigo, const char *nome_bebida, float ml, float preco, int quantidade, float teor_alcoolico);
+
 #endif

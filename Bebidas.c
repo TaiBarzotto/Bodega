@@ -14,7 +14,7 @@ int height(Bebida *N) {
     return N->height;
 }
 
-// Função para criar um novo nó Bebida
+// Criar um novo nó Bebida
 Bebida *newBebida(int codigo, const char *nome_bebida, float ml, float preco, int quantidade, float teor_alcoolico) {
     Bebida *node = (Bebida *)malloc(sizeof(Bebida));
     node->codigo = codigo;
@@ -29,19 +29,18 @@ Bebida *newBebida(int codigo, const char *nome_bebida, float ml, float preco, in
     return node;
 }
 
-// Função para obter o fator de balanceamento de um nó
+// Obter o fator de balanceamento de um nó
 int getBalance(Bebida *N) {
     if (N == NULL)
         return 0;
     return height(N->left) - height(N->right);
 }
 
-// Função para realizar uma rotação à direita
+// Rotação à direita
 Bebida *rightRotate(Bebida *y) {
     Bebida *x = y->left;
     Bebida *f = x->right;
 
-    // Realiza a rotação
     x->right = y;
     y->left = f;
 
@@ -49,16 +48,14 @@ Bebida *rightRotate(Bebida *y) {
     y->height = max(height(y->left), height(y->right)) + 1;
     x->height = max(height(x->left), height(x->right)) + 1;
 
-    // Retorna o novo nó raiz
     return x;
 }
 
-// Função para realizar uma rotação à esquerda
+// Rotação à esquerda
 Bebida *leftRotate(Bebida *x) {
     Bebida *y = x->right;
     Bebida *f = y->left;
 
-    // Realiza a rotação
     y->left = x;
     x->right = f;
 
@@ -66,40 +63,43 @@ Bebida *leftRotate(Bebida *x) {
     x->height = max(height(x->left), height(x->right)) + 1;
     y->height = max(height(y->left), height(y->right)) + 1;
 
-    // Retorna o novo nó raiz
     return y;
 }
 
-// Função para inserir um novo nó na árvore AVL
+// Inserir um novo nó na árvore
 Bebida *insertBebida(Bebida *node, int codigo, const char *nome_bebida, float ml, float preco, int quantiedade, float teor_alcoolico) {
-    // 1. Realiza a inserção normal na árvore binária de busca
-    if (node == NULL)
+    // 1- Inserir
+    if (node == NULL){
         return newBebida(codigo, nome_bebida, ml, preco, quantiedade, teor_alcoolico);
+    }
 
-    if (codigo < node->codigo)
+    if (codigo < node->codigo){
         node->left = insertBebida(node->left, codigo, nome_bebida, ml, preco, quantiedade, teor_alcoolico);
-    else if (codigo > node->codigo)
+    }
+    else if (codigo > node->codigo){
         node->right = insertBebida(node->right, codigo, nome_bebida, ml, preco, quantiedade, teor_alcoolico);
-    else // Códigos duplicados não são permitidos
+    }
+    else {// Códigos duplicados não são permitidos
         printf("Erro: Código %d já existe!\n", codigo);
         return node;
+    }
 
-    // 2. Atualiza a altura do nó ancestral
+    // 2-Atualiza a altura
     node->height = 1 + max(height(node->left), height(node->right));
 
-    // 3. Obtém o fator de balanceamento deste nó ancestral para verificar se ele se tornou desbalanceado
+    // 3- Verifica o balanceamento
     int balance = getBalance(node);
 
-    // Se o nó se tornar desbalanceado, existem 4 casos
+    // Se o nó estiver desbalanceado, vai ser balanceado
 
     // Caso 1: Rotação à direita
-    if (balance > 1 && codigo < node->left->codigo)
+    if (balance > 1 && codigo < node->left->codigo){
         return rightRotate(node);
-
+    }
     // Caso 2: Rotação à esquerda
-    if (balance < -1 && codigo > node->right->codigo)
+    if (balance < -1 && codigo > node->right->codigo){
         return leftRotate(node);
-
+    }
      // Caso 3: Rotação à esquerda seguida de rotação à direita (LR)
     if (balance > 1 && codigo > node->left->codigo) {
         node->left = leftRotate(node->left);
@@ -112,7 +112,7 @@ Bebida *insertBebida(Bebida *node, int codigo, const char *nome_bebida, float ml
         return leftRotate(node);
     }
 
-    // Retorna o ponteiro do nó (não alterado)
+    // Retorna o nó (não alterado)
     return node;
 }
 
@@ -127,10 +127,6 @@ void liberar_bebidas(Bebida *node, int *contador) {
     (*contador)++;
 }
 
-void liberar_bebidas_root(S_Bebidas *s, int *contador) {
-    liberar_bebidas(s->root, contador);
-    s->root = NULL; 
-}
 
 void iniciar_bebida(S_Bebidas *s) {
     s->root = NULL;
@@ -153,6 +149,7 @@ Bebida* validar_codigo(Bebida *node, int codigo) {
 
 void cadastrar_bebida(S_Bebidas *s) {
     int codigo, opcao = 1;
+    //aux é para inserir os dados, e a temp é um auxiliar de comparação
     Bebida *aux = (Bebida *)malloc(sizeof(Bebida)), *temp;
     if (aux == NULL) {
         printf("Erro ao alocar memoria para a bebida.\n");
@@ -241,6 +238,7 @@ void cadastrar_bebida(S_Bebidas *s) {
 
 }
 
+// Percorre a arvore
 void exibir_bebidas(Bebida *node){
     if (node == NULL) {
         return;
@@ -269,7 +267,7 @@ void mostrar_bebida(S_Bebidas *s) {
 }
 
 void comprar_bebida(S_Bebidas *s) {
-    Bebida *bebida;
+    Bebida *bebida; // A bebida que vai ter estoque atualizado
     int codigo, quantidade, opcao = 1;
 
     if (s->root == NULL) {

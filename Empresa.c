@@ -20,7 +20,8 @@ int validar_cnpj(Empresa *temp, Empresa *aux){
             while (getchar() != '\n'); 
             printf("Esse CNPJ ja foi cadastrado!\n");
             printf("0-SAIR\n");
-            opcao = ler_inteiro("1-CADASTRAR OUTRO CNPJ\n");
+            printf("1-CADASTRAR OUTRO CNPJ\n");
+            opcao = ler_inteiro("");
             switch (opcao)
             {
             case 0:
@@ -41,12 +42,10 @@ int validar_cnpj(Empresa *temp, Empresa *aux){
 
 void cadastrar_bodega(S_Empresa *s){
     int opcao;
-    char cnpj_digitado[15], cnpj[20];
+    char cnpj_digitado[15], cnpj[20]; //Vetores para formatar o CNPJ
     Empresa *aux = (Empresa *) malloc(sizeof(Empresa));
     Empresa *temp = s->head;
     
-
-
     while (1){
         printf("Digite o CNPJ da Bodega: ");
         scanf("%s", cnpj_digitado);
@@ -89,6 +88,7 @@ void cadastrar_bodega(S_Empresa *s){
     printf("Bodega cadastrada!\n");
 }
 
+//Le o cnpj e retorna o ponteiro da empresa que possui esse cnpj
 Empresa *logar_bodega(S_Empresa *s){
     int opcao;
     char cnpj[20], cnpj_digitado[25];

@@ -28,15 +28,17 @@ void iniciar_cliente(S_Clientes *s){
     s->tail = NULL;
 }
 
+// Verifica se esse CPF já foi cadastrado
 int validar_cpf(Cliente *temp, Cliente *aux){
     int opcao; 
     while (temp != NULL)
     {
-        if(strcmp(temp->cpf, aux->cpf) == 0){ // Verifica se esse CPF já foi cadastrado
+        if(strcmp(temp->cpf, aux->cpf) == 0){ 
             while (getchar() != '\n'); 
             printf("Esse CPF ja foi cadastrado!\n");
             printf("0-SAIR\n");
-            opcao = ler_inteiro("1-CADASTRAR OUTRO CPF\n");
+            printf("1-CADASTRAR OUTRO CPF\n");
+            opcao = ler_inteiro("");
             switch (opcao)
             {
             case 0:
@@ -55,13 +57,13 @@ int validar_cpf(Cliente *temp, Cliente *aux){
     return 2;
 }
 
-int ultimo_codigo = 0;
+int ultimo_codigo = 0; //Armazenar o codigo do ultimo cliente cadastrado
 
 void cadastrar_cliente(S_Clientes *s){
     int validacao = 1, opcao;
-    char cpf_digitado[15], cpf[20];
-    Cliente *aux = (Cliente *) malloc(sizeof(Cliente));
-    Cliente *temp = s->head, *insertion = s->head;
+    char cpf_digitado[15], cpf[20]; //Vetor para formatar CPF
+    Cliente *aux = (Cliente *) malloc(sizeof(Cliente)); //Armazenar os valores dos atributos
+    Cliente *temp = s->head, *insertion = s->head; //Auxiliares para percorrer a lista
     
     while (1){
         printf("Digite o CPF do cliente: ");
@@ -144,6 +146,7 @@ void cadastrar_cliente(S_Clientes *s){
     return;
 }
 
+//Percorre a lista
 void mostrar_cliente(S_Clientes *s){
     if(s->head == NULL){
         printf("Nenhum cliente cadastrado no sistema!\n");

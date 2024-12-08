@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "Auxiliares.h"
 
+// Verifica se é possivel converter a entrada para inteiro
 int numero_inteiro_valido(const char *str) {
     char *endptr;
     strtol(str, &endptr, 10); 
@@ -11,15 +12,14 @@ int numero_inteiro_valido(const char *str) {
     return *endptr == '\n' || *endptr == '\0';
 }
 
-int 
-ler_inteiro(const char *mensagem) {
+int ler_inteiro(const char *mensagem) {
     int valor;
-    char buffer[100];
+    char buffer[100]; // Serve para armazenar as entradas do usuario
 
     while (1) {
         printf("%s", mensagem);
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-            if (strcmp(buffer, "\n") == 0) {
+            if (strcmp(buffer, "\n") == 0) { //Verifica se a entrada foi vazia
                 printf("Entrada vazia. Por favor, digite um numero inteiro.\n");
                 continue; 
             }
@@ -35,7 +35,8 @@ ler_inteiro(const char *mensagem) {
     }
 }
 
-int numero_valido(const char *str) {
+// Verifica se é possivel converter a entrada para float
+int numero_valido(const char *str) { 
     char *endptr;
     strtof(str, &endptr); 
 
@@ -44,17 +45,17 @@ int numero_valido(const char *str) {
 
 float ler_float(const char *mensagem) {
     float valor;
-    char buffer[100];
+    char buffer[100]; // Serve para armazenar as entradas do usuario
 
     while (1) {
         printf("%s", mensagem);
-        if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-            if (strcmp(buffer, "\n") == 0) {
+        if (fgets(buffer, sizeof(buffer), stdin) != NULL) { 
+            if (strcmp(buffer, "\n") == 0) { // Checa se a entrada está vazia
                 printf("Entrada vazia. Por favor, digite um numero decimal.\n");
                 continue; 
             }
-            if (numero_valido(buffer)) {
-                valor = strtof(buffer, NULL); 
+            if (numero_valido(buffer)) { 
+                valor = strtof(buffer, NULL); // Converte a string para float
                 return valor; 
             } else {
                 printf("Entrada invalida. Por favor, digite um numero decimal.\n");
@@ -65,6 +66,7 @@ float ler_float(const char *mensagem) {
     }
 }
 
+// Valida o CPF e retorna ele formatado
 int formatarCPF(char *cpf_entrada, char *cpf_formatado) {
     int j = 0, a, b=0, opcao;
 
@@ -83,7 +85,7 @@ int formatarCPF(char *cpf_entrada, char *cpf_formatado) {
     cpf_formatado[b] = '\0'; 
 
     if (j == 11 && b == 11) {
-        // Formata o CPF
+        // Formata o CPF se tiver 11 digitos numéricos
         snprintf(cpf_formatado, 15, "%c%c%c.%c%c%c.%c%c%c-%c%c",
                  cpf_formatado[0], cpf_formatado[1], cpf_formatado[2],
                  cpf_formatado[3], cpf_formatado[4], cpf_formatado[5],
@@ -108,6 +110,7 @@ int formatarCPF(char *cpf_entrada, char *cpf_formatado) {
 
 }
 
+// Valida o CNPJ e retorna ele formatado
 int formatarCNPJ(char *cnpj_entrada, char *cnpj_Formatado) {
     int j = 0, a,b=0, opcao;
 
@@ -127,7 +130,7 @@ int formatarCNPJ(char *cnpj_entrada, char *cnpj_Formatado) {
     cnpj_Formatado[b] = '\0'; 
 
     if (b == 14 && j == 14) {
-        // Formata o CNPJ
+        // Formata o CNPJ, se tiver 14 digitos numéricos 
         snprintf(cnpj_Formatado, 19, "%c%c.%c%c%c.%c%c%c/%c%c%c%c-%c%c",
                  cnpj_Formatado[0], cnpj_Formatado[1], cnpj_Formatado[2],
                  cnpj_Formatado[3], cnpj_Formatado[4], cnpj_Formatado[5],
@@ -153,6 +156,7 @@ int formatarCNPJ(char *cnpj_entrada, char *cnpj_Formatado) {
 
 }
 
+// Erro referente ao codigo da bebida inserido pelo usuario
 int mensagem_erro_codigo(const char *mensagem){
     int opcao;
     printf("%s", mensagem);
