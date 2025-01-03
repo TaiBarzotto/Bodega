@@ -1,4 +1,4 @@
-# README - Sistema de Gerenciamento de Bebidas
+# Trabalho Final de Estrutura de Dados - Sistema de Gerenciamento para Bodega
 
 ## Descrição do Projeto
 
